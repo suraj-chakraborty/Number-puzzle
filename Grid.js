@@ -7,7 +7,6 @@ export default class Grid {
     #cells
 
 
-
     constructor(gridElement) {
         gridElement.style.setProperty("--cell-col", CELL_COL)
         gridElement.style.setProperty("--cell-size", `${CELL_SIZE}vmin`)
@@ -17,6 +16,9 @@ export default class Grid {
         })
         // console.log(this.cells)
         // createCellElements(gridElement)
+    }
+    get cells() {
+        return this.#cells
     }
 
     get cellsByColumn() {
@@ -92,11 +94,24 @@ class Cell {
         this.#mergeTile = this.#y
     }
 
+    get value() {
+        return this.value
+    }
+
     //merge two tiles but one merge at a time
     canAccept(tile) {
         return (
-            (this.tile == null) || (this.mergeTile== null && this.tile.value === tile.value)
+            this.tile == null || (this.mergeTile == null && this.tile.value === tile.value)
         )
+    }
+    mergeTiles() {
+
+        if (this.tile == null || this.mergeTile == null) return
+
+        this.tile.value = this.tile.value + this.mergeTile.value
+        // console.log(this.tile.value)
+        this.mergeTile.remove()
+        this.mergeTile = null
     }
 
 
@@ -107,7 +122,7 @@ function createCellElements(gridElement) {
     const cells = []
     for (let i = 0; i < CELL_COL * CELL_COL; i++) {
         const cell = document.createElement("div")
-        cell.classList.add("cells")
+        cell.classList.add("cell")
         cells.push(cell)
         gridElement.append(cell)
     }

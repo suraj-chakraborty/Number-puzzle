@@ -26,14 +26,14 @@ body {
     position: relative;
 }
 
-.cells {
+.cell {
     background-color: #AAA;
     border-radius: 1vmin;
 }
 
 .tile {
-    --background-lightness: 20%;
-    --text-lightness: 80%;
+    /*--background-lightness: 20%;*/
+    /*--text-lightness: 80%;*/
     position: absolute;
     display: flex;
     justify-content: center;
@@ -45,7 +45,6 @@ body {
     top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
     left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
     font-weight: bold;
-    font-size: 60px;
     background-color: hsl(200, 50%, var(--background-lightness));
     color: hsl(200, 25%, var(--text-lightness));
     animation: show 200ms ease-in-out;
