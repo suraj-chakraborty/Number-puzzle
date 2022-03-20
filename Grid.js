@@ -6,6 +6,8 @@ export default class Grid {
     // decleration of private variable which cannot be acessed outside the grid class;
     #cells
 
+
+
     constructor(gridElement) {
         gridElement.style.setProperty("--cell-col", CELL_COL)
         gridElement.style.setProperty("--cell-size", `${CELL_SIZE}vmin`)
@@ -16,6 +18,22 @@ export default class Grid {
         // console.log(this.cells)
         // createCellElements(gridElement)
     }
+
+    get cellsByColumn() {
+        return this.#cells.reduce((cellgrid, cell) => {
+            cellgrid[cell.x]= cellgrid[cell.x] || []
+            cellgrid[cell.x][cell.y]= cell
+            return cellgrid
+        }, [])
+    }
+    get cellsByRow() {
+        return this.#cells.reduce((cellgrid, cell) => {
+            cellgrid[cell.y] = cellgrid[cell.y] || []
+            cellgrid[cell.y][cell.x] = cell
+            return cellgrid
+        }, [])
+    }
+
     get #emptyCells() {
         return this.#cells.filter(cell => cell.tile == null)
     }
@@ -33,15 +51,25 @@ class Cell {
     #x
     #y
     #tile
+    #mergeTile
 
     constructor(cellElement, x, y) {
         this.#cellElement = cellElement
         this.#x = x
         this.#y = y
     }
+
+    get x() {
+        return this.#x
+    }
+    get y() {
+        return this.#y
+    }
+
     get tile() {
         return this.#tile
     }
+
     set tile(value) {
         this.#tile=value
         if(value == null) return
@@ -50,6 +78,29 @@ class Cell {
         this.#tile.x = this.#x
         this.#tile.y= this.#y
     }
+
+
+    get mergeTile() {
+        return this.#mergeTile
+    }
+
+    set mergeTile(value) {
+        this.#mergeTile = value
+        if (value == null) return
+        //for movement & merging animation
+        this.#mergeTile = this.#x
+        this.#mergeTile = this.#y
+    }
+
+    //merge two tiles but one merge at a time
+    canAccept(tile) {
+        return (
+            (this.tile == null) || (this.mergeTile== null && this.tile.value === tile.value)
+        )
+    }
+
+
+
 }
 
 function createCellElements(gridElement) {
